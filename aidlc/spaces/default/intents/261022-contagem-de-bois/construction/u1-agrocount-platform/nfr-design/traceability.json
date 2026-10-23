@@ -1,0 +1,32 @@
+{
+  "stage": "nfr-design",
+  "unit": "u1-agrocount-platform",
+  "upstream_ids": [
+    "NFR1.1",
+    "NFR1.2",
+    "NFR2.1",
+    "NFR2.2",
+    "NFR3.1",
+    "NFR3.2",
+    "NFR4.1",
+    "NFR4.2",
+    "NFR5.1",
+    "NFR5.2",
+    "NFR6.1",
+    "NFR6.2"
+  ],
+  "coverage": [
+    { "id": "NFR1.1", "status": "OK", "target": "SAHI sliced inference with NMS fusion for 4K photos and ByteTrack multi-object tracking for drone videos (performance-design.md)" },
+    { "id": "NFR1.2", "status": "OK", "target": "Shadow evaluation and atomic model pointer promotion gate enforcing accuracy >= 95% and non-regression (reliability-design.md)" },
+    { "id": "NFR2.1", "status": "OK", "target": "Pre-GPU fail-fast validation and vectorized SAHI/ByteTrack execution pipeline (performance-design.md)" },
+    { "id": "NFR2.2", "status": "OK", "target": "Indexed transactional queries and paginated REST endpoints with < 500ms p95 budget (performance-design.md)" },
+    { "id": "NFR3.1", "status": "OK", "target": "Stateless worker architecture with Cloud Run GPU scale-to-zero (min-instances=0) policy (scalability-design.md)" },
+    { "id": "NFR3.2", "status": "OK", "target": "Immutable per-sample object store partitioning samples/{sample_id}/ for Golden Dataset growth (scalability-design.md)" },
+    { "id": "NFR4.1", "status": "OK", "target": "Atomic UNIQUE(idempotency_key) deduplication on inspections and HITL review batches (reliability-design.md)" },
+    { "id": "NFR4.2", "status": "OK", "target": "Isolated failure domains per inspection and atomic rollback-safe model promotion (reliability-design.md, logical-components.md)" },
+    { "id": "NFR5.1", "status": "OK", "target": "WCAG 2.1 AA triple visual coding (color + border style + badge OK/!/+) and keyboard shortcut manager (observability-design.md)" },
+    { "id": "NFR5.2", "status": "OK", "target": "Health endpoint (/api/v1/health) and per-run inference/HITL telemetry recording (observability-design.md)" },
+    { "id": "NFR6.1", "status": "OK", "target": "Environment-driven configuration with zero hardcoded secrets and strict filename/coordinate sanitization (security-design.md)" },
+    { "id": "NFR6.2", "status": "OK", "target": "Automated test and line-coverage verification gate enforcing >= 80% coverage (security-design.md)" }
+  ]
+}

@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+.git/
+.agents/
+aidlc/
+data/
+.venv/

@@ -1,0 +1,24 @@
+{
+  "stage": "code-generation",
+  "unit": "u1-agrocount-platform",
+  "version": 1,
+  "writes": [
+    { "path": "src/agrocount/__init__.py" },
+    { "path": "src/agrocount/models.py" },
+    { "path": "src/agrocount/repository.py" },
+    { "path": "src/agrocount/vision.py" },
+    { "path": "src/agrocount/hitl.py" },
+    { "path": "src/agrocount/service.py" },
+    { "path": "src/agrocount/api.py" },
+    { "path": "src/agrocount/web/index.html" },
+    { "path": "src/agrocount/web/app.js" },
+    { "path": "tests/__init__.py" },
+    { "path": "tests/test_agrocount.py" },
+    { "path": "scripts/run_coverage.py" },
+    { "path": "scripts/verify.sh" },
+    { "path": "Dockerfile" },
+    { "path": ".dockerignore" },
+    { "path": "pyproject.toml" },
+    { "path": "README.md" }
+  ]
+}

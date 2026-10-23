@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgroCount IA — Plataforma de Contagem Bovina & Estúdio HITL</title>
+  <style>
+    :root {
+      --bg-primary: #F8FAFC;
+      --surface-card: #FFFFFF;
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --accent-green: #15803D;
+      --accent-amber: #D97706;
+      --accent-blue: #2563EB;
+      --accent-red: #DC2626;
+      --border-subtle: #E2E8F0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+    header {
+      background: var(--surface-card);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand {
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--accent-green);
+    }
+    .model-badge {
+      background: #DCFCE7;
+      color: #14532D;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    main {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+    .kpi-value {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 1.85rem;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+    .studio-layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 1024px) {
+      .studio-layout { grid-template-columns: 1fr; }
+    }
+    .canvas-viewport {
+      background: #0F172A;
+      color: #F8FAFC;
+      border-radius: 10px;
+      min-height: 420px;
+      position: relative;
+      padding: 16px;
+      overflow: hidden;
+    }
+    .bbox-legend {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      font-size: 0.85rem;
+    }
+    .legend-high { border: 2px solid var(--accent-green); padding: 2px 8px; border-radius: 4px; }
+    .legend-uncertain { border: 2px dashed var(--accent-amber); padding: 2px 8px; border-radius: 4px; }
+    .legend-manual { border: 3px double var(--accent-blue); padding: 2px 8px; border-radius: 4px; }
+    .btn {
+      min-height: 38px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn:focus-visible {
+      outline: 3px solid var(--accent-blue);
+      outline-offset: 2px;
+    }
+    .btn-primary { background: var(--accent-green); color: #FFFFFF; }
+    .btn-secondary { background: #E2E8F0; color: var(--text-primary); }
+    .btn-blue { background: var(--accent-blue); color: #FFFFFF; }
+    .queue-list {
+      list-style: none;
+      padding: 0;
+      margin: 12px 0;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+    .queue-item {
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">AgroCount IA — Contagem Bovina &amp; Active Learning (HITL)</div>
+    <div class="model-badge" id="active-model-badge">Modelo Ativo: yolo11m-agro-v1.0 (96.0%)</div>
+  </header>
+
+  <main>
+    <!-- Tela 1: Dashboard de Inspeções e KPIs -->
+    <section aria-labelledby="dashboard-heading">
+      <h1 id="dashboard-heading">1. Dashboard de Fazendas, Pastos e Inspeções</h1>
+      <div class="kpi-grid">
+        <div class="card" data-testid="kpi-raw-count">
+          <div>Contagem Bruta IA (SAHI / ByteTrack)</div>
+          <div class="kpi-value" id="val-raw-count">0 cabeças</div>
+        </div>
+        <div class="card" data-testid="kpi-uncertain-count">
+          <div>Fila de Triagem HITL (Baixa Confiança 0.25–0.74)</div>
+          <div class="kpi-value" id="val-uncertain-count">0 pendentes</div>
+        </div>
+        <div class="card" data-testid="kpi-audited-count">
+          <div>Contagem Final Auditada (Imutável)</div>
+          <div class="kpi-value" id="val-audited-count">0 cabeças</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tela 2: Submissão de Mídia de Drone (Gate Pré-GPU) -->
+    <section class="card" aria-labelledby="upload-heading">
+      <h2 id="upload-heading">2. Nova Inspeção de Voo de Drone (Validação Pré-GPU)</h2>
+      <div data-testid="upload-dropzone" style="border: 2px dashed #94A3B8; border-radius: 10px; padding: 16px;">
+        <p>Envie ortomosaico/foto 4K (<code>.jpg</code>, <code>.png</code>, <code>.tiff</code>) ou vídeo de drone (<code>.mp4</code>, <code>.mov</code> &le; 2 GiB, &ge; 1280x720 px).</p>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <label>Altitude (m): <input type="number" id="input-altitude" value="60" min="10" max="500" /></label>
+          <label>Sobreposição (%): <input type="number" id="input-overlap" value="75" min="0" max="95" /></label>
+          <button type="button" class="btn btn-primary" id="btn-create-demo-inspection">Processar Voo com IA</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tela 3: Estúdio de Revisão HITL (Canvas + Fila de Baixa Confiança) -->
+    <section class="card" aria-labelledby="studio-heading">
+      <h2 id="studio-heading">3. Estúdio de Revisão Human-in-the-Loop (HITL)</h2>
+      <div class="bbox-legend" aria-label="Legenda de codificação tripla WCAG 2.1 AA">
+        <span class="legend-high">[✓] Alta Confiança (&ge; 0.75) — Borda Sólida Verde (#15803D)</span>
+        <span class="legend-uncertain">[?] Dúvida da IA (0.25–0.74) — Borda Tracejada Âmbar (#D97706)</span>
+        <span class="legend-manual">[+H] Adição Manual (FN) — Borda Dupla Azul (#2563EB)</span>
+      </div>
+      <div class="studio-layout">
+        <div class="canvas-viewport" data-testid="hitl-canvas-container" tabindex="0" aria-label="Canvas interativo de revisão de caixas delimitadoras">
+          <div id="canvas-status">Atalhos ativos: Setas (Navegar fila) | Espaço (Confirmar) | Delete (Remover Falso Positivo) | N (Adicionar Animal / Falso Negativo)</div>
+          <div id="canvas-boxes-layer" style="margin-top: 16px;"></div>
+        </div>
+        <div>
+          <h3>Fila de Triagem de Baixa Confiança</h3>
+          <ul class="queue-list" data-testid="uncertain-queue-list" id="uncertain-queue" role="listbox" aria-label="Detecções incertas para revisão"></ul>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+            <button type="button" class="btn btn-primary" data-testid="btn-approve-finalize" id="btn-approve-finalize">
+              Aprovar Contagem &amp; Salvar no Golden Dataset
+            </button>
+          </div>
+          <div id="live-status" aria-live="polite" style="margin-top:10px; font-size:0.9rem; color:var(--text-secondary);"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tela 4: Painel de Evolução do Modelo & Exportação de Laudos -->
+    <section class="card" aria-labelledby="evolution-heading">
+      <h2 id="evolution-heading">4. Evolução do Modelo (Golden Dataset &amp; Fine-Tuning) e Exportação de Laudos</h2>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+        <button type="button" class="btn btn-blue" data-testid="btn-trigger-finetune" id="btn-trigger-finetune">
+          Disparar Fine-Tuning Sob Demanda (Gate &ge; 95%)
+        </button>
+        <button type="button" class="btn btn-secondary" data-testid="btn-export-pdf" id="btn-export-pdf">
+          Exportar Laudo Oficial (PDF)
+        </button>
+        <button type="button" class="btn btn-secondary" data-testid="btn-export-csv" id="btn-export-csv">
+          Exportar Planilha (CSV)
+        </button>
+      </div>
+      <pre id="output-console" style="background:#F1F5F9; padding:12px; border-radius:8px; margin-top:12px; overflow-x:auto; font-size:0.85rem;">Pronto para auditoria pecuária assistida por IA.</pre>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

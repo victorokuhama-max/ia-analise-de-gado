@@ -1,0 +1,32 @@
+{
+  "stage": "infrastructure-design",
+  "unit": "u1-agrocount-platform",
+  "upstream_ids": [
+    "NFR1.1",
+    "NFR1.2",
+    "NFR2.1",
+    "NFR2.2",
+    "NFR3.1",
+    "NFR3.2",
+    "NFR4.1",
+    "NFR4.2",
+    "NFR5.1",
+    "NFR5.2",
+    "NFR6.1",
+    "NFR6.2"
+  ],
+  "coverage": [
+    { "id": "NFR1.1", "status": "OK", "target": "Cloud Run GPU L4 worker configuration for YOLO+SAHI and YOLO+ByteTrack inference (infrastructure-specification.md)" },
+    { "id": "NFR1.2", "status": "OK", "target": "Cloud Run Fine-Tuning job and ModelCandidateRejectedRegression monitoring alert (infrastructure-specification.md, monitoring-design.md)" },
+    { "id": "NFR2.1", "status": "OK", "target": "4 vCPU / 16 GB RAM / 1x NVIDIA L4 sizing and InferenceLatencyBreach alert (infrastructure-specification.md, monitoring-design.md)" },
+    { "id": "NFR2.2", "status": "OK", "target": "Indexed Operational Database and api_request_latency_p95_ms SLI/SLO target < 500ms (infrastructure-specification.md, monitoring-design.md)" },
+    { "id": "NFR3.1", "status": "OK", "target": "Cloud Run serverless min-instances=0 scale-to-zero configuration (infrastructure-specification.md)" },
+    { "id": "NFR3.2", "status": "OK", "target": "Google Cloud Storage agrocount-golden-dataset bucket with versioned samples/{sample_id}/ prefixes (infrastructure-specification.md)" },
+    { "id": "NFR4.1", "status": "OK", "target": "Transactional database UNIQUE(idempotency_key) constraint and immutable GCS object prefixes (infrastructure-specification.md)" },
+    { "id": "NFR4.2", "status": "OK", "target": "Cloud Run immutable revisions with instant traffic rollback and /api/v1/health probe (infrastructure-specification.md, cicd-pipeline.md)" },
+    { "id": "NFR5.1", "status": "OK", "target": "Static and UI asset verification in CI/CD Stage 1 serving WCAG 2.1 AA Web Review Studio (cicd-pipeline.md)" },
+    { "id": "NFR5.2", "status": "OK", "target": "Structured JSON stdout logging for Cloud Logging and /api/v1/health + /api/v1/models/active metrics (monitoring-design.md)" },
+    { "id": "NFR6.1", "status": "OK", "target": "TLS 1.3 ingress, least-privilege Service Account IAM, and environment-injected secrets (infrastructure-specification.md, cicd-pipeline.md)" },
+    { "id": "NFR6.2", "status": "OK", "target": "CI/CD Pipeline Stage 2 & Stage 3 executing scripts/verify.sh with mandatory >= 80% line coverage gate (cicd-pipeline.md)" }
+  ]
+}
