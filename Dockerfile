@@ -1,4 +1,4 @@
-# Multi-stage Dockerfile para u1-agrocount-platform (Cloud Run GPU L4 & API Scale-to-Zero)
+# Multi-stage Dockerfile para u1-agrocount-platform (Cloud Run Scale-to-Zero)
 FROM python:3.11-slim AS builder
 
 WORKDIR /app
@@ -23,4 +23,4 @@ RUN mkdir -p /app/data/storage && chown -R agrocount:agrocount /app
 USER 10001:10001
 EXPOSE 8080
 
-CMD ["python3", "-c", "from agrocount.api import create_http_server; srv = create_http_server('0.0.0.0', 8080); srv.serve_forever()"]
+CMD ["python3", "-c", "import os; from agrocount.api import create_http_server; port = int(os.environ.get('PORT', '8080')); srv = create_http_server('0.0.0.0', port); print(f'AgroCount IA listening on 0.0.0.0:{port}', flush=True); srv.serve_forever()"]
